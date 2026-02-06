@@ -1,1 +1,233 @@
 index.html
+<!DOCTYPE html><html lang="pt-BR"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Network Unlock</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding-top: 60px;
+      background-image: url('images/luis.png');
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #333;
+      color: white;
+      display: flex;
+      justify-content: flex-end;
+      padding: 15px 20px;
+      z-index: 999;
+    }
+
+    .navbar button {
+      background-color: #555;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      margin-left: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .header-title {
+      text-align: center;
+      color: white;
+      margin-top: 30px;
+      font-size: 28px;
+      font-weight: bold;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 996;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 5px;
+      width: 90%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .modal button {
+      width: 100%;
+      padding: 10px;
+      background: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 4px;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de menu -->
+  <div class="navbar">
+    <div id="auth-buttons" class="hidden">
+      <button onclick="openModal('signup-modal')">Cadastrar</button>
+      <button onclick="openModal('login-modal')">Entrar</button>
+    </div>
+  </div>
+
+  <!-- Título -->
+  <div class="header-title">
+    <h1>Calculadora de código de desbloqueio de rede</h1>
+  </div>
+
+  <!-- Modal de Cadastro -->
+  <div id="signup-modal" class="modal">
+    <div class="modal-content">
+      <h2>Cadastro</h2>
+      <form id="signup-form">
+        <input type="email" id="signup-email" placeholder="Email" required="">
+        <input type="password" id="signup-password" placeholder="Senha (mínimo 6 caracteres)" required="">
+        <button type="submit">Cadastrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de Login -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <h2>Login</h2>
+      <form id="login-form">
+        <input type="email" id="login-email" placeholder="Email" required="">
+        <input type="password" id="login-password" placeholder="Senha (mínimo 6 caracteres)" required="">
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <p id="message"></p>
+
+  <!-- Firebase + Script principal -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBJGaEM_wzqQMcW4HD4M0S-TX6c-F3ESak",
+      authDomain: "akurula-bae89.firebaseapp.com",
+      projectId: "akurula-bae89",
+      storageBucket: "akurula-bae89.firebasestorage.app",
+      messagingSenderId: "884057010989",
+      appId: "1:884057010989:web:79dacebe1c0c99afdad9a4",
+      measurementId: "G-PYQBK3XZG4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+
+    const authButtons = document.getElementById('auth-buttons');
+
+    // Verifica se o usuário já fez login antes neste dispositivo
+    onAuthStateChanged(auth, (user) => {
+      setTimeout(() => {
+        if (!user || !localStorage.getItem('firstLoginDone')) {
+          authButtons.classList.remove('hidden');
+        }
+      }, 4000);
+
+      if (user && localStorage.getItem('firstLoginDone')) {
+        window.location.href = "calcular.html";
+      }
+    });
+
+    // Cadastro
+    document.getElementById('signup-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          document.getElementById('message').innerText = "Cadastro realizado com sucesso!";
+          closeModals();
+        })
+        .catch((error) => {
+          document.getElementById('message').innerText = "Erro no cadastro: A senha deve ter no mínimo 6 caracteres";
+        });
+    });
+
+    // Login
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          localStorage.setItem('lastLogin', new Date().toISOString());
+          localStorage.setItem('firstLoginDone', 'true');
+          document.getElementById('message').innerText = "Login realizado com sucesso!";
+          closeModals();
+          window.location.href = "calcular.html";
+        })
+        .catch(() => {
+          document.getElementById('message').innerText = "Erro no login, verifique os seus dados de acesso.";
+        });
+    });
+
+    // Funções para modais
+    window.openModal = function (id) {
+      document.getElementById(id).style.display = 'block';
+    };
+
+    window.closeModals = function () {
+      document.getElementById('signup-modal').style.display = 'none';
+      document.getElementById('login-modal').style.display = 'none';
+    };
+
+    window.onclick = function (event) {
+      if (event.target.classList.contains('modal')) {
+        closeModals();
+      }
+    };
+  </script>
+
+
+</body></html>
