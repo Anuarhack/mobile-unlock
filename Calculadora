@@ -1,1 +1,49 @@
-index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Unlock Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Network Unlock Calculator</h1>
+        <button id="darkModeToggle">Toggle Dark Mode</button>
+    </header>
+    <main>
+        <section>
+            <h2>Device Database</h2>
+            <select id="deviceSelect">
+                <option value="">Select a device...</option>
+                <option value="device1">Device 1</option>
+                <option value="device2">Device 2</option>
+                <!-- Add more devices as needed -->
+            </select>
+        </section>
+        <section>
+            <h2>Unlock Method</h2>
+            <select id="unlockMethodSelect">
+                <option value="method1">Method 1</option>
+                <option value="method2">Method 2</option>
+                <!-- Add more methods as needed -->
+            </select>
+        </section>
+        <section>
+            <h2>History Tracking</h2>
+            <ul id="historyList"></ul>
+        </section>
+        <section>
+            <h2>Favorites</h2>
+            <ul id="favoritesList"></ul>
+        </section>
+        <button id="exportButton">Export</button>
+        <form id="unlockForm">
+            <input type="text" id="inputCode" placeholder="Enter unlock code" required>
+            <button type="submit">Calculate</button>
+        </form>
+        <div id="output"></div>
+    </main>
+</body>
+</html>
