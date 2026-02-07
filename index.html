@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Unlock</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <h1>Mobile Unlock</h1>
+        <ul>
+            <li><a href="#calculator">Calculator</a></li>
+            <li><a href="#history">History</a></li>
+            <li><a href="#favorites">Favorites</a></li>
+            <li><a href="#device-database">Device Database</a></li>
+            <li><a href="#auth" data-toggle="modal" data-target="#authModal">Login</a></li>
+        </ul>
+    </nav>
+
+    <!-- Authentication Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Login</h2>
+            <form id="authForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Calculator Form -->
+    <section id="calculator">
+        <h2>Unlock Calculator</h2>
+        <form id="calculatorForm">
+            <label for="imei">IMEI:</label>
+            <input type="text" id="imei" name="imei" required>
+            <button type="submit">Calculate Unlock Code</button>
+        </form>
+    </section>
+
+    <!-- Tabs Section -->
+    <div class="tabs">
+        <button class="tab" onclick="openTab('history')">History</button>
+        <button class="tab" onclick="openTab('favorites')">Favorites</button>
+        <button class="tab" onclick="openTab('device-database')">Device Database</button>
+    </div>
+
+    <div id="history" class="tab-content">
+        <h3>History</h3>
+        <!-- History Content -->
+    </div>
+    
+    <div id="favorites" class="tab-content" style="display:none;">
+        <h3>Favorites</h3>
+        <!-- Favorites Content -->
+    </div>
+    
+    <div id="device-database" class="tab-content" style="display:none;">
+        <h3>Device Database</h3>
+        <!-- Device Database Content -->
+    </div>
+
+    <script src="script.js"></script> <!-- Link to your JavaScript file -->
+</body>
+</html>
